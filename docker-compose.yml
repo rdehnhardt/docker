@@ -1,0 +1,46 @@
+version: '3'
+
+volumes:
+  filesystem:
+
+networks:
+  database:
+  frontend:
+  backend:
+
+services:
+  database:
+    build: .docker/postgres
+    container_name: ${DB_HOST}
+    volumes:
+      - filesystem:/var/lib/postgresql/data
+    env_file:
+      - .env
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    networks:
+      - database
+
+  php:
+    build: .docker/php-fpm
+    volumes:
+      - ./:/var/www/application
+    ports:
+      - "9000:9000"
+    networks:
+      - backend
+
+  nginx:
+    build: .docker/nginx
+    volumes:
+      - ./:/var/www/application
+    ports:
+      - "8080:80"
+    links:
+      - php
+    networks:
+      - frontend
