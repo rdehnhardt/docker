@@ -1,7 +1,5 @@
-# Image
 FROM php:7.1-fpm-alpine
-
-VOLUME ["/var/www/application"]
+VOLUME ["/var/www/app"]
 
 # Install dependencies
 RUN apk --no-cache --update add \
@@ -25,7 +23,6 @@ RUN docker-php-ext-configure json && \
     docker-php-ext-configure mbstring && \
     docker-php-ext-configure zip && \
     docker-php-ext-configure pdo && \
-    docker-php-ext-configure pdo_sqlite && \
     docker-php-ext-configure pdo_mysql && \
     docker-php-ext-configure curl && \
     docker-php-ext-configure iconv && \
@@ -47,17 +44,13 @@ RUN docker-php-ext-install \
     mcrypt \
     zip \
     pdo \
-    pdo_sqlite \
     pdo_mysql \
     curl \
     iconv \
     xml  \
     phar \
+    soap \
     gd
-
-# Install PDO
-RUN set -ex && apk --no-cache add postgresql-dev
-RUN docker-php-ext-install pgsql pdo_pgsql
 
 # Install Imagick
 RUN apk add --update --no-cache autoconf g++ imagemagick-dev libtool make pcre-dev \
