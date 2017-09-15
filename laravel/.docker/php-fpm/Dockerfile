@@ -1,5 +1,4 @@
 FROM php:7.1-fpm-alpine
-VOLUME ["/var/www/app"]
 
 # Install dependencies
 RUN apk --no-cache --update add \
