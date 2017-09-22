@@ -17,7 +17,6 @@ RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql mcrypt tokenizer xml
 RUN pecl channel-update pecl.php.net && pecl install memcached && docker-php-ext-enable memcached
 
 RUN rm /var/cache/apk/* && mkdir -p /var/www/app
-
 COPY supervisord.conf /etc/supervisord.conf
 
 ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]

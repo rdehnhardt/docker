@@ -18,6 +18,13 @@ services:
     ports:
       - "9000:9000"
 
+  php-worker:
+    build: .docker/php-worker
+    volumes:
+      - .:/var/www/app
+    networks:
+      - backend
+
   nginx:
     build: .docker/nginx
     volumes:
