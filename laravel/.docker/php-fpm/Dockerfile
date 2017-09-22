@@ -8,6 +8,7 @@ RUN apk --no-cache --update add \
     libpng-dev \
     libjpeg-turbo-dev \
     libmcrypt-dev \
+    postgresql-dev \
     freetype-dev && \
     rm -rf /tmp/* && \
     rm -rf /var/cache/apk/*
@@ -44,10 +45,12 @@ RUN docker-php-ext-install \
     zip \
     pdo \
     pdo_mysql \
+    pdo_pgsql \
     curl \
     iconv \
     xml  \
     phar \
+    pgsql \
     soap \
     gd
 
@@ -60,7 +63,6 @@ RUN apk add --update --no-cache autoconf g++ imagemagick-dev libtool make pcre-d
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Container workdir
 WORKDIR /var/www/app
 
 # Open port 9000
