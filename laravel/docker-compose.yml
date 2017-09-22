@@ -80,7 +80,6 @@ services:
   php-console:
     build: .docker/php-worker
     volumes:
-      - .docker/php-worker/cron:/etc/crontab/cron
       - ./:/var/www/app
     networks:
       - backend
