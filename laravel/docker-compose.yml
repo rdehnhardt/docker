@@ -68,8 +68,6 @@ services:
     ports:
       - "${BEANSTALKD_PORT}:11300"
     privileged: true
-    depends_on:
-      - php-fpm
     networks:
       - backend
 
