@@ -63,10 +63,6 @@ RUN apk add --update --no-cache autoconf g++ imagemagick-dev libtool make pcre-d
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Add user
-RUN addgroup -g 3000 -S app
-RUN adduser -u 3000 -S -D -G app app
-
 WORKDIR /var/www/app
 
 # Open port 9000
