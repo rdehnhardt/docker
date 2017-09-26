@@ -1,17 +1,23 @@
-FROM php:7.1-fpm-alpine
+FROM php:7.1-alpine
 
-# Install dependencies
-RUN apk --no-cache --update add \
+RUN apk --update add wget \
     libxml2-dev \
-    sqlite-dev \
     curl-dev \
     libpng-dev \
     libjpeg-turbo-dev \
     libmcrypt-dev \
     postgresql-dev \
-    freetype-dev && \
-    rm -rf /tmp/* && \
-    rm -rf /var/cache/apk/*
+    freetype-dev \
+    curl \
+    git \
+    build-base \
+    libmemcached-dev \
+    libmcrypt-dev \
+    libxml2-dev \
+    zlib-dev \
+    autoconf \
+    cyrus-sasl-dev \
+    libgsasl-dev
 
 # Configure PHP extensions
 RUN docker-php-ext-configure json && \
@@ -60,13 +66,10 @@ RUN apk add --update --no-cache autoconf g++ imagemagick-dev libtool make pcre-d
     && docker-php-ext-enable imagick \
     && apk del autoconf g++ libtool make pcre-dev
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# CRON
+RUN echo "* * * * * php /var/www/app/artisan schedule:run" > /etc/crontabs/www-data
+COPY entry.sh /entry.sh
+RUN chmod 755 /entry.sh
+RUN /usr/bin/crontab /etc/crontabs/www-data
 
-WORKDIR /var/www/app
-
-# Open port 9000
-EXPOSE 9000
-
-# Execute command
-CMD ["php-fpm"]
+CMD ["/entry.sh"]

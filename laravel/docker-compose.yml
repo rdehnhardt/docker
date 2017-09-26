@@ -5,8 +5,8 @@ volumes:
   redis:
 
 networks:
-  backend:
   frontend:
+  backend:
 
 services:
   php-fpm:
@@ -17,6 +17,20 @@ services:
       - backend
     ports:
       - "9000:9000"
+
+  php-queue:
+    build: .docker/php-worker
+    volumes:
+      - ./:/var/www/app
+    networks:
+      - backend
+
+  php-console:
+    build: .docker/php-console
+    volumes:
+      - ./:/var/www/app
+    networks:
+      - backend
 
   nginx:
     build: .docker/nginx
@@ -47,6 +61,8 @@ services:
       - backend
 
   beanstalkd:
+    env_file:
+      - .env
     container_name: ${BEANSTALKD_HOST}
     build: .docker/beanstalkd
     ports:
@@ -67,19 +83,5 @@ services:
       - redis:/data
     ports:
       - "${REDIS_PORT}:6379"
-    networks:
-      - backend
-
-  php-queue:
-    build: .docker/php-worker
-    volumes:
-      - ./:/var/www/app
-    networks:
-      - backend
-
-  php-console:
-    build: .docker/php-worker
-    volumes:
-      - ./:/var/www/app
     networks:
       - backend
